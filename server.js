@@ -29,20 +29,23 @@ app.get('/api/timestamp', (req, res, next) => {
 // your first API endpoint... 
 app.get("/api/timestamp/:date_string", (req, res, next) => {
   var dateIsValid = false;
+  var unix = '';
   var d = new Date(req.params.date_string);
   if(d instanceof Date && !isNaN(d)){
     dateIsValid = true;
+    unix = Date.parse(req.params.date_string);
   }else {  
     var unix2int = parseInt(req.params.date_string);
     d = new Date(unix2int*1000);
     if(d instanceof Date && !isNaN(d)){
       dateIsValid = true;
+      unix = req.params.date_string;
     } 
   }
   if(dateIsValid) {
     var time = d.getTime();
     var utc = d.toUTCString();
-    req.time = {"unix": req.params.date_string, "utc" : utc };
+    req.time = {"unix": unix, "utc" : utc };
   }else {  
     req.time = {"error" : "Invalid Date" }; 
   }
