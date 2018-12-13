@@ -28,7 +28,8 @@ app.get('/api/timestamp', (req, res, next) => {
 
 // your first API endpoint... 
 app.get("/api/timestamp/:date_string", (req, res, next) => {
-  var date = req.params.date_string;
+  var unix2int = parseInt(req.params.date_string);
+  var date = new Date(unix2int*1000);
   var time = date.getTime();
   var utc = date.toUTCString();
   req.time = {"unix": time, "utc" : utc };
