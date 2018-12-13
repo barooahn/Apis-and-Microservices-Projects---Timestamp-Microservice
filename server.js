@@ -16,12 +16,17 @@ app.use(express.static('public'));
 app.get("/", function (req, res) {
   res.sendFile(__dirname + '/views/index.html');
 });
-
+app.get('/api/timestamp', (req, res, next) => {
+  req.time = new Date().toString();
+  next();
+},(req,res)=> {
+  res.json({time:req.time});  
+});
 
 // your first API endpoint... 
-app.get("/api/timestamp:date_string", function (req, res) {
-  console.log(req.params.date_string);
-  res.json({"time" : req.params.date_string});
+app.get("/api/timestamp/:date_string", function (req, res) {
+  if(!req.params.date_string)
+  res.json({"time" : 'empty'});
   //res.json({greeting: 'hello API'});
 });
 
