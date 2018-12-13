@@ -17,19 +17,25 @@ app.get("/", function (req, res) {
   res.sendFile(__dirname + '/views/index.html');
 });
 app.get('/api/timestamp', (req, res, next) => {
-  req.time = new Date().toString();
+  var date = new Date();
+  var time = date.getTime();
+  var utc = date.toUTCString();
+  req.time = {"unix": time, "utc" : utc };
   next();
 },(req,res)=> {
-  res.json({time:req.time});  
+  res.json(req.time);  
 });
 
 // your first API endpoint... 
-app.get("/api/timestamp/:date_string", function (req, res) {
-  if(!req.params.date_string)
-  res.json({"time" : 'empty'});
-  //res.json({greeting: 'hello API'});
+app.get("/api/timestamp/:date_string", (req, res, next) => {
+  var date = req.params.date_string;
+  var time = date.getTime();
+  var utc = date.toUTCString();
+  req.time = {"unix": time, "utc" : utc };
+  next();
+},(req,res)=> {
+  res.json(req.time);  
 });
-
 
 
 // listen for requests :)
